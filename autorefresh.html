@@ -1,0 +1,11 @@
+<head>
+<iframe id='fr'></iframe>
+<script>
+function rel(){
+var fr = document.getElementById('fr');
+fr.src = "http://www.example.com?ts="+Date.now();
+//fr.src = "https://www.youtube.com/watch?v=pBwj2oUDcyk&list=RD3nTuHFMZsrs&index=9?ts="+Date.now();
+}
+setInterval(rel, 2000);
+</script>
+</head>
