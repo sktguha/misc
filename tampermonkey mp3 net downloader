@@ -1,0 +1,24 @@
+// ==UserScript==
+// @name         mp3 net downloader
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://safeurl.net/*
+// @grant window.close
+// ==/UserScript==
+
+(function() {
+    'use strict';
+    window.onload = function (){
+        console.log("came here");
+        var a = document.getElementsByClassName("waves-effect waves-light btn")[0];
+            var url = a.onclick.toString().split("(")[2].split("'")[1];
+            a.href = url;
+            a.download = "song";
+            a.onclick = null;
+            a.click();
+            setTimeout(window.close.bind(window), 2000);
+    };
+    // Your code here...
+})();
