@@ -1,0 +1,44 @@
+// ==UserScript==
+// @name         New Userscript
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://www.mailinator.com/*
+// @grant        GM_setClipboard
+// ==/UserScript==
+
+
+var email, timer;
+    function main(){
+        var em = Math.random().toString(26).substring(2);
+        document.getElementsByClassName('lb-input')[1].value = em;
+        setTimeout("document.getElementById('inbox_button').click()", 2000);
+        var ck = function(){
+            document.getElementsByClassName('lb_all_sub-item')[0].click();
+            GM_setClipboard(em + "@mailinator.com");
+            email = em;
+            timer = setInterval(cp, 1000);
+        };
+        setTimeout(ck, 3000);
+    }
+
+    document.ondblclick = main;
+
+    function cp() {
+        var tx = document.getElementsByClassName('all_message-min_text-3')[0].innerText.split(" ").pop();
+        if(Number.isInteger(tx*1)) {
+            GM_setClipboard(tx);
+            clearInterval(timer);
+           function blink(){
+              var old = document.title;
+               document.title = "cp " + email;
+               setTimeout(function(){
+               document.title = old;
+               }, 1000);
+           };
+           blink();
+           setTimeout(blink, 2000);
+        }
+        return false;
+    };
