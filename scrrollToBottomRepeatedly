@@ -1,0 +1,1 @@
+javascript:var tm = setInterval(function scrollUpDown(){ window.scrollTo(0,10); window.scrollTo(0,document.body.scrollHeight); }, 2000); setTimeout(function(){ window.clearInterval(tm) }, 2000 * 5);
