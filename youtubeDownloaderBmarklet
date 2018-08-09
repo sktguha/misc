@@ -1,7 +1,1 @@
-var add = "https://www.convertmp3.io/widget/button/?video=https://www.youtube.com/watch?v=pIz2K3ArrWk&color=397818";
-var fr = document.createElement("iframe");
-fr.src = add;
-document.body.appendChild(fr);
-fr.style.position = "absolute";
-ft.style.top = "0px";
-fr.style.left = "1px";
+var add = "https://www.convertmp3.io/widget/button/?video="+location.href;var fr = document.createElement("iframe"); fr.src = add; document.body.appendChild(fr); fr.style.position = "absolute"; ft.style.top = "0px"; fr.style.left = "1px";
