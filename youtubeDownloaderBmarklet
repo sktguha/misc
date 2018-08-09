@@ -1,0 +1,1 @@
+var add = "https://break.tv/widget/button/?link=$$$$$&color=DA4453&text=fff".split("$$$$$").join(location.href);
