@@ -1,0 +1,242 @@
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.13.0/css/mdb.min.css" rel="stylesheet">
+<style>
+    /* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+     td {
+        vertical-align: top;
+        text-align: left;
+        
+        }
+        tr {
+            margin-bottom: 30px;
+        }
+        body {
+            background-color: black;
+            color: white;
+        }
+        .item {
+            margin-left : 20px;
+            color: blue;
+        }
+        .selected {
+            margin-left : 20px;
+            color: white;
+        }
+</style>
+</head>
+<body>
+    <div>
+        <div style="padding: 30 10 30 10; text-align:center; margin-left:80px">
+            <div>
+                <div style="float:left">DISCOVER</div>
+                <span class="item" onclick="getPopular()">POPULAR</span>
+                <span class="item" onclick="getTrending()">TRENDING</span>
+                <span class="item" onclick="getNewest()">NEWEST</span>
+                <span class="item" style="margin-right:20px" onclick="getTopRated()">TOP RATED</span>
+                
+                    <input size=5 id="searchbar"/><button onclick="doSearchByText()">search</button>
+            </div>
+        </div>
+        
+        <table>
+            <tr>
+                <td>
+
+                <div style="overflow-y: scroll; height:700px;margin-left: 80px;">
+                    <table cellspacing="20" id="mov-cont" style="border-spacing: 20px 40px;">
+                    </table>
+                </div>
+                
+            </td>
+            <td vertical-align:top>
+                <div style="margin-top: 0px; margin-left : 60px;">
+                    DISCOVER OPTIONS<br><br><br>
+                    Type<br>
+                    <select class="mdb-select md-form" id="type">
+                        <option value="tv">tv</option>
+                        <option value="movie">movie</option>
+                    </select><br>
+                    Genre<br>
+                    <select id="genre" class="mdb-select md-form"></select><br>
+                    Year<br>
+                    <select id="syear" class="mdb-select md-form">
+                      
+                    </select>-<select id="eyear" class="mdb-select md-form">
+                    </select><br>
+                    Rating<br><br>
+                    <select id="rating">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">4</option>
+                    </select>
+                    <br>
+                    <br>
+                    <button onclick="doSearch()">Search</button>
+                </div>
+            </td>
+            </tr>
+            
+        </table>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script>
+        let movies = [];
+        let store = [];
+        let ct = 0;
+        let genres = [];
+        for(let i=1;i<3;i++){
+            
+            $.get("https://api.themoviedb.org/3/discover/movie?api_key=3a94078fb34b772a31d9a1348035bed7&page="+i, function(idx, data){
+                ct ++;
+                store.push({
+                    id : idx,
+                    data
+                })
+                if(ct >= 2){
+                    $.get("https://api.themoviedb.org/3/genre/movie/list?api_key=3a94078fb34b772a31d9a1348035bed7&language=en-US", function(data){
+                        genres = data.genres;
+                        genres.forEach(genre => {
+                            let op = document.createElement("option");
+                            op.value = genre.name;
+                            op.innerText = genre.name;
+                            document.getElementById("genre").appendChild(op);
+                        })
+                        let arr = store.sort(s => s.id).map(s=>s.data.results);
+                        arr.forEach(a=> movies = movies.concat(a));
+                        init();
+                    });
+                }
+            }.bind(null, i))
+        }
+        
+
+
+
+
+        function init(){
+            for(let i=1953;i<2025;i++){
+                let op = document.createElement("option");
+                op.value = i;
+                op.innerText = i;
+                if( i=== 2008)
+                    op.selected = true
+                document.getElementById("eyear").appendChild(op)
+            }
+            for(let i=1953;i<2025;i++){
+                let op = document.createElement("option");
+                op.value = i;
+                op.innerText = i;
+                if( i=== 2005)
+                    op.selected = true
+                document.getElementById("syear").appendChild(op)
+            }
+            renderMovies(movies);
+        }
+
+        function renderMovies(movies){
+            let tab = document.getElementById("mov-cont");
+            tab.innerHTML = "";
+            for(let i=0;i<movies.length;i = i+4){
+                let tr = document.createElement("tr");
+                tr.appendChild(getMovieTd(movies[i]));
+                tr.appendChild(getMovieTd(movies[i+1]));
+                tr.appendChild(getMovieTd(movies[i+2]));
+                tr.appendChild(getMovieTd(movies[i+3]));
+                tab.appendChild(tr);
+            }
+        }
+
+        function getMovieTd(movie){
+            let td = document.createElement("td");
+            let html = "<div><img src=$src width='180' height='360'/><div style='text-align:center;'><div style='color:blue;'>$title</div><span style='color:white'>$genre</span>,&nbsp;<span style='color:white'>$year</span><div></div>";
+            html = html.split("$src").join(movie.poster_path ? "https://image.tmdb.org/t/p/w500"+ movie.poster_path : "https://image.shutterstock.com/image-vector/empty-placeholder-image-icon-design-260nw-1366372628.jpg");
+            html = html.split("$title").join(movie.title ? movie.title.substring(0, 20): "title");
+            html = html.split("$year").join(movie.release_date ? movie.release_date.split("-")[0] : "unknown");
+            if(movie.genre_ids.length === 0) {
+                movie.genre_ids[0] = genres[0].id
+            }
+            html = html.split("$genre").join(genres.filter(genre => genre.id === movie.genre_ids[0])[0].name);
+            td.innerHTML = html;
+            return td;
+        }
+
+        function getPopular(){
+            $.get("https://api.themoviedb.org/3/discover/movie?api_key=3a94078fb34b772a31d9a1348035bed7&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1", function(data){
+                renderMovies(data.results);
+            });
+        }
+
+        function getNewest(){
+            $.get("https://api.themoviedb.org/3/discover/movie?api_key=3a94078fb34b772a31d9a1348035bed7&language=en-US&sort_by=primary_release_date.desc&include_adult=false&include_video=false&page=1", function(data){
+                renderMovies(data.results);
+            });
+        }
+
+        function getTrending(){
+            $.get("https://api.themoviedb.org/3/trending/movie/week?api_key=3a94078fb34b772a31d9a1348035bed7", function(data){
+                renderMovies(data.results);
+            });
+        }
+
+        function getTopRated(){
+            $.get("https://api.themoviedb.org/3/discover/movie?api_key=3a94078fb34b772a31d9a1348035bed7&language=en-US&sort_by=vote_count.desc&include_adult=false&include_video=false&page=1", function(data){
+                renderMovies(data.results);
+            });
+        }
+
+        function doSearch(){
+            //type is the route
+            let type = document.getElementById("type").value;
+
+            let genre = document.getElementById("genre").value;
+            genre = genres.filter(genre1 => genre1.name === genre)[0].id;
+            let releasegte = document.getElementById("syear").value + "-01-01";
+            let releaselte = document.getElementById("eyear").value  + "-01-01";
+            let rating = document.getElementById("rating").value;
+            //vote_average.gte for rating
+            let path = "https://api.themoviedb.org/3/discover/"+type+"?api_key=3a94078fb34b772a31d9a1348035bed7&primary_release_date.gte="
+            + releasegte+"&primary_release_date.lte"+releaselte
+            + "&vote_average.lte="+rating + "&with_genres="+genre;
+            $.get(path, function(data){
+                renderMovies(data.results);
+            })
+        }
+
+        function doSearchByText(){
+            let query = document.getElementById("searchbar").value;
+            let path = "https://api.themoviedb.org/3/search/movie?api_key=3a94078fb34b772a31d9a1348035bed7&language=en-US&query="+ query+"&page=1&include_adult=false";
+            $.get(path, function(data){
+                renderMovies(data.results);
+            })
+
+        }
+
+    </script>
+</body>
