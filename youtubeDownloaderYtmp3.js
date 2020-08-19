@@ -34,6 +34,7 @@ const fn = ()=>{
  var a = document.createElement("a");
  a.href = link;
  a.click()
+    setTimeout(()=>window.close(),5000);
 };
  fn();
 }, 600);
