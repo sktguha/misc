@@ -1,3 +1,4 @@
+//const h=2019; const l=2012;  Array(h-l+1).fill().map((_,i)=>l+i);
 function calc(init=3.2, yr=[], marker=[]){
     return yr.reduce((acc, inf, i)=>{ const res= acc + (Number(inf)/100)*acc; marker[i] && console.log('in '+marker[i]+' it is '+acc); return res;},init)
 }
