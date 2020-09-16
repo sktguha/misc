@@ -12,7 +12,7 @@ calc(42, [3.6, 3.43, 4.54, 2.19], [2017,2018,2019,2020]); //47.047664156639996
 calc(8, [3.43,3.43,3.43,3.6, 3.43, 4.54, 2.19], [2014,2015,2016,2017,2018,2019,2020])
 calc(12, [3.43,3.43,3.6, 3.43, 4.54, 2.19], [2015,2016,2017,2018,2019,2020])
 calc(42, Array(4).fill(20), [2020,2021,2022,2023]);
-//usage: calc accepts three arguments , intial salary, array of inflation per year, and third argument is the years(just for display purposes)
+//usage: calc accepts three arguments , intial salary, array of inflation or appraisal percentage per year, and third argument is the years(just for display purposes)
 calc(42, Array(4).fill(20), [2020,2021,2022,2023]); // 72.576
 calc(42, Array(4).fill(10), [2020,2021,2022,2023]); // 55.902
 
