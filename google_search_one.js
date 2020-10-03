@@ -15,13 +15,13 @@
          if(location.href.startsWith('https://www.google.com/search?q=salesforce+stock&')){
              var $ = document.querySelector.bind(document);
              var sp = $('span[jsname="vWLAgc"]').innerText;
-             $('.gLFyf.gsfi').value = (Number(sp)*251)/4 + ' dollars in rupees';
-             $('.Tg7LZd').click();
+             location.href= 'https://www.google.com/search?q='+((Number(sp)*251)/4) + ' dollars in rupees';
              return;
          }
        var info = document.querySelector('.txJRaf');
          if(!info) return;
-         info.innerText += ' id:'+Number(2800000+280000+Number(document.querySelector('.DFlfde.SwHCTb').dataset.value));
+         var tot = Number(2800000+280000+Number(document.querySelector('.DFlfde.SwHCTb').dataset.value));
+         info.innerText += ' id:'+tot+' '+Number(0.7*tot)+' '+Number((0.7*tot)-(19800*12 + 100000));
          info.style.zoom = 1.6;
          info.onclick = ()=>location.href='https://www.google.com/search?q=salesforce+share+price';
          info.oncontextmenu = ()=>window.open('https://www.google.com/search?q=salesforce+share+price');
