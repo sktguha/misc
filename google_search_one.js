@@ -8,6 +8,7 @@
 // @grant        none
 // ==/UserScript==
 
+//This is private and personal. please don't share with anyone
 (function() {
     'use strict';
      window.onload = ()=>{
