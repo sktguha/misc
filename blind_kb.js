@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         blind kb expand save
+// @name         blind expand
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  
+// @description  try to take over the world!
 // @author       You
 // @match        https://www.teamblind.com/*
 // @icon         https://www.google.com/s2/favicons?domain=teamblind.com
@@ -13,7 +13,8 @@
     'use strict';
      window.onload = ()=>{
          let lock = 0;
-         document.onkeydown = ({code, ctrlKey})=>{
+         document.onkeydown = ({code, altKey})=>{
+             if(!altKey) return;
              if(code==="KeyC"){
                  document.getElementsByClassName('comment_btn')[0].firstElementChild.click()
              } else if (code == "KeyL" && !lock){
