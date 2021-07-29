@@ -20,6 +20,9 @@
            doAcc();
        } else if(key==="f"){
            att(()=>[...document.getElementsByTagName('a')].filter(a=>a.innerText==='favorite')[0].click());
+       } else if(key === "l"){
+          document.getElementsByClassName('storylink')[0].target = '_blank'
+          document.getElementsByClassName('storylink')[0].click()
        }
      }
     // Your code here...
