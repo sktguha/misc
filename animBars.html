@@ -1,0 +1,56 @@
+<div>sliding bars...<span>Total: </span><span id="total">0</span></div>
+<div id="barC"></div>
+<button onClick="addMore()">Add more</button>
+
+<script>
+function main(){
+    addMore();
+}
+let running = false, totalToAnim = 0, curr = 0;
+function addMore(){
+    totalToAnim++;
+    document.getElementById("total").innerText = totalToAnim;
+    if(running === false){
+        running = true;
+        addNewBarAndAnimate();
+    } 
+}
+
+function addNewBarAndAnimate(){
+    const div = document.createElement("div");
+    div.style.backgroundColor = getRandomHexCode();
+    div.style.height = "10px";
+    div.style.border = "2px solid white";
+    document.getElementById("barC").appendChild(div);
+    for( let i=0;i<100;i++){
+        function animHelper(iVar){
+            div.style.width = (iVar*10) + 'px';
+            if(iVar==99){
+                curr++;
+                if(curr >= totalToAnim){
+                    running = false;
+                } else {
+                    addNewBarAndAnimate();
+                }
+            }
+        }
+        
+        setTimeout(animHelper.bind(null, i), i*10);
+    }
+}
+
+function getRandomHexCode(){
+    let letters = "0123456789ABCDEF"; 
+  
+    // HTML color code starts with # 
+    let color = '#'; 
+    
+    // Generating 6 times as HTML color code  
+    // consist of 6 letter or digits 
+    for (let i = 0; i < 6; i++) 
+        color += letters[(Math.floor(Math.random() * 16))]; 
+
+    return color;
+}
+main();
+</script>
