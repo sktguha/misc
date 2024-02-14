@@ -55,6 +55,15 @@ function runAsyncGraph(graph, map, finalCallback) {
     const executableTasks = notDoneTasks.filter(taskKey => (graph[taskKey].dependency || []).every(dep=>map[dep]));
     let ct=0;
     executableTasks.forEach((taskKey)=>{
+        // here we need similar to map variable an alreadyRunning flag to prevent double runs of a task
+        // if(alreadyRunning[taskKey]) { 
+        //  ct++; 
+        //  if(ct === executableTasks.length){
+        //    runAsyncGraph(graph, map, alreadyRunning, finalCallback); // add in arguments list as well as below pass it on and also in onDone after line 69 
+        //    before 70 add alreadyRunning[taskKey] = false
+        //  }}
+        //    return;
+        // }
         graph[taskKey].task(()=>{
             map[taskKey] = true;
             ct++;
