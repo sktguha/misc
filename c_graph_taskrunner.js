@@ -44,7 +44,7 @@ const asyncGraph = {
 };
 runAsyncGraph(asyncGraph, {}, ()=>{ console.log("finally done"); })
 
-
+// can be done in reverse direction also ( greedy method) , find all which have dependencies, then have a running lock to prevent double runs
 function runAsyncGraph(graph, map, finalCallback) {
   // implement
     const notDoneTasks = Object.keys(graph).filter((key)=>!map[key]);
