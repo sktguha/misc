@@ -56,7 +56,9 @@ function runAsyncGraph(graph, map, finalCallback) {
     let ct=0;
     executableTasks.forEach((taskKey)=>{
         // here we need similar to map variable an alreadyRunning flag to prevent double runs of a task
-        // if(alreadyRunning[taskKey]) { 
+        // if(alreadyRunning[taskKey]) {  
+        //  this is bit more complicated, below code needs to come in the alreadyRunning.then(()=>{ block actually, same the task runner below needs to set 
+        //  alreadyRunning promise variable and resolve it and then clear the delete alreadyRunning[taskKey]
         //  ct++; 
         //  if(ct === executableTasks.length){
         //    runAsyncGraph(graph, map, alreadyRunning, finalCallback); // add in arguments list as well as below pass it on and also in onDone after line 69 
