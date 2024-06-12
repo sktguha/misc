@@ -1,0 +1,40 @@
+<head></head>
+<body>
+press any keys 
+<script>
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+
+const show = ()=>{
+    let dv = document.createElement("div");
+    const col = ['red','pink','yellow'];
+//col[Math.floor(Math.random()*col.length)]
+    let dm = Math.random()*40;
+    dv.style = `background-color:${getRandomColor()}; border-radius: 50%; width: ${dm}px; height: ${dm}px; position:absolute`;
+    if(Math.random()>0.7){
+       dv.style.borderRadius="0%";
+    }
+    let i=0;
+    let id = setInterval(()=>{
+        i++;
+        dv.style.height = (i*20)+'px';
+	dv.style.width = (i*(20+Math.random()*10))+'px';
+        if(i>(Math.random()*300)){
+            document.body.removeChild(dv);
+            clearInterval(id);
+        }
+    },20);
+    dv.style.top = (Math.random()*window.innerHeight)-100+'px';
+    dv.style.left = (Math.random()*window.innerWidth)-100+'px';
+    document.body.appendChild(dv);
+}
+document.onkeydown = show;
+</script>
+</body>
