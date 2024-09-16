@@ -20,15 +20,7 @@ const [inp, setInput] = useState ("");
 
 const [values, setValues] =useState([]);
 
-return <div> eee
-
-}
-}
-</div>
-}
-
-
-
+return <div> 
 <input onChange={(e)=>{
 
 setInput(e.target.value); 
