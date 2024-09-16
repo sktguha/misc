@@ -1,12 +1,8 @@
-import React, { useState,
+import. / App.css '
 
-useEffect } from 'react'
+import FileSystem from '. /
 
-import./App.css'
-
-import FileSystem from './
-
-FileSystem'
+FileSystem '
 
 import { useState } from "react"
 
@@ -60,11 +56,10 @@ return (
 
 <div><Dropdown /></div>
 
-<div style={{display:
+<div style={{display:'none '}}>
+  <FileSystem /></ div>
 
-'none'}}><FileSystem /></ div>
-
-<div style={{display: 'none'}}
+<div style={{display: 'none '}}
 
 className="header">
 
@@ -123,32 +118,19 @@ Use the Shell to install new packages.
 )
 
 }
-
-done, id }){
-
+}
 
 
-return <div>
 
-
-function TodoItem({ text, md,
+function TodoItem({ text, md}){
 
 <button onClick={()=>md(id)}
 
 >Mark done</button>
 
-{'<'}{done? done:
-
-not-done '}{'> '}
-
-
-{text}</div>
-
-
-
+{' < '}{done? 'done': 'not-done '
+} {
+  '> '
 }
 
-
-
-export default App
-
+}
