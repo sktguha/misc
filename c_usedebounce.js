@@ -2,6 +2,23 @@ import * as React from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import searchHackerNews from "./searchHackerNews";
 import SearchResults from "./SearchResults";
+import { useState, useEffect } from 'react'
+
+export const useDebounce = (value, milliSeconds) => {
+ const [debouncedValue, setDebouncedValue] = useState(value);
+
+ useEffect(() => {
+   const handler = setTimeout(() => {
+     setDebouncedValue(value);
+   }, milliSeconds);
+
+   return () => {
+     clearTimeout(handler);
+   };
+ }, [value, milliSeconds]);
+
+ return debouncedValue;
+};
 
 export default function App() {
   const [searchTerm, setSearchTerm] = React.useState("js");
