@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Saikat Guha - FIFA Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+    .card {
+      background: linear-gradient(145deg, #1f2937, #111827);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      border: 3px solid gold;
+      animation: float 4s ease-in-out infinite;
+      transition: box-shadow 0.4s ease-in-out, border-color 0.4s ease-in-out;
+    }
+
+    .card.glow {
+      box-shadow: 0 0 20px 4px #22c55e, 0 0 40px 8px #4ade80;
+      border-color: #4ade80;
+    }
+
+    .fifa-font {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .stamina-bar {
+      transition: width 0.4s ease-in-out, background-color 0.4s ease-in-out;
+    }
+
+    #staminaLabel {
+      transition: color 0.4s ease-in-out;
+    }
+
+    .glow {
+      box-shadow: 0 0 8px 2px #22c55e, 0 0 16px 4px #4ade80;
+      transition: box-shadow 0.4s ease-in-out;
+    }
+
+    .player-img.glow {
+      box-shadow: 0 0 12px 3px #22c55e;
+      transition: box-shadow 0.4s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center min-h-screen">
+
+  <div class="card max-w-xs w-full rounded-2xl p-4 text-white fifa-font relative transition-all duration-500">
+
+    <!-- Injury Icon -->
+    <div id="injuryIcon" class="absolute top-3 right-3 hidden text-red-500 text-3xl font-bold animate-pulse">+</div>
+
+    <!-- Rarity Badge -->
+    <div class="absolute top-3 left-3 bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded shadow-md">
+      GOLD RARE
+    </div>
+
+    <!-- Player Image -->
+    <img src="https://i.ibb.co/xSrqgLXq/IMG-20250413-WA0021.jpg" alt="Player" class="player-img rounded-xl w-full h-48 object-cover shadow-md mb-4 border-2 border-yellow-400">
+
+    <!-- Player Info -->
+    <div class="text-center">
+      <h2 class="text-2xl tracking-wide font-bold">Saikat Guha</h2>
+      <p class="text-yellow-400 text-lg">Overall: 98</p>
+      <p class="text-green-400 text-xl mt-2 transition-all duration-300">Stamina:</p>
+    </div>
+
+    <!-- Animated Stamina Bar -->
+    <div class="w-full bg-gray-800 rounded-full h-4 mt-2">
+      <div id="staminaBar" class="h-4 rounded-full stamina-bar" style="width: 90%; background: #22c55e;"></div>
+    </div>
+    <p id="staminaLabel" class="text-center mt-1 text-sm text-white">90</p>
+
+    <!-- Player Positions -->
+    <div class="flex justify-center gap-2 mt-3">
+      <span class="bg-gray-700 px-2 py-1 text-xs rounded-lg border border-yellow-400">LW</span>
+      <span class="bg-gray-700 px-2 py-1 text-xs rounded-lg border border-yellow-400">CF</span>
+      <span class="bg-gray-700 px-2 py-1 text-xs rounded-lg border border-yellow-400">CDM</span>
+    </div>
+
+    <!-- Stamina Buttons -->
+    <div class="flex justify-center gap-4 mt-4">
+      <button onclick="changeStamina(-5)" class="bg-red-600 px-3 py-1 rounded-lg hover:bg-red-700 transition">-</button>
+      <button onclick="changeStamina(5)" class="bg-green-600 px-3 py-1 rounded-lg hover:bg-green-700 transition">+</button>
+    </div>
+
+    <!-- Injury Controls -->
+    <div class="text-center mt-5">
+      <button onclick="toggleInjury()" class="bg-yellow-500 px-4 py-1 rounded-lg text-black hover:bg-yellow-600 transition">
+        Toggle Injury
+      </button>
+      <p id="injuryReason" class="text-red-400 text-sm mt-2 hidden"></p>
+    </div>
+  </div>
+
+  <script>
+    let stamina = 90;
+    const staminaBar = document.getElementById("staminaBar");
+    const staminaLabel = document.getElementById("staminaLabel");
+    const injuryIcon = document.getElementById("injuryIcon");
+    const injuryReasonEl = document.getElementById("injuryReason");
+    const card = document.querySelector(".card");
+    const playerImg = document.querySelector(".player-img");
+
+    let isInjured = false;
+    const injuryReasons = [
+      "Hamstring strain",
+      "Ankle sprain",
+      "Knee ligament tear",
+      "Groin pull",
+      "Muscle fatigue",
+      "Fracture",
+      "Cramp"
+    ];
+
+    function changeStamina(amount) {
+      stamina = Math.max(0, Math.min(100, stamina + amount));
+      staminaBar.style.width = stamina + "%";
+      staminaLabel.textContent = stamina;
+
+      let color = "";
+      if (stamina < 30) {
+        color = "#f87171";
+      } else if (stamina < 50) {
+        color = "#facc15";
+      } else if (stamina < 70) {
+        color = "#a3e635";
+      } else if (stamina < 90) {
+        color = "#4ade80";
+      } else {
+        color = "#22c55e";
+      }
+
+      staminaBar.style.background = color;
+      staminaLabel.style.color = color;
+
+      if (stamina > 90) {
+        staminaBar.classList.add("glow");
+        card.classList.add("glow");
+        playerImg.classList.add("glow");
+      } else {
+        staminaBar.classList.remove("glow");
+        card.classList.remove("glow");
+        playerImg.classList.remove("glow");
+      }
+    }
+
+    function toggleInjury() {
+      isInjured = !isInjured;
+      if (isInjured) {
+        injuryIcon.classList.remove("hidden");
+        const reason = injuryReasons[Math.floor(Math.random() * injuryReasons.length)];
+        injuryReasonEl.textContent = `Injury: ${reason}`;
+        injuryReasonEl.classList.remove("hidden");
+      } else {
+        injuryIcon.classList.add("hidden");
+        injuryReasonEl.classList.add("hidden");
+      }
+    }
+  </script>
+
+</body>
+</html>
