@@ -157,7 +157,7 @@ export default function useAutocomplete(props) {
     }
     setActiveOptions(options);
   }, [options, inputValue, getOptionLabel]);
-  // END of modification for race condition
+  // END of modification for race condition foc doublefoc triplefoc
 
   const [focused, setFocused] = React.useState(false);
 
