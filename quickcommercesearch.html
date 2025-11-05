@@ -58,9 +58,23 @@
     }
 
     function openAll() {
-      openBlinkit();
-      openSwiggy();
-      openZepto();
+      const q = getQuery();
+      if (!q) return;
+
+      const urls = [
+        {tab: 'blinkitTab', url: `https://blinkit.com/s/?q=${q}`},
+        {tab: 'swiggyTab', url: `https://www.swiggy.com/instamart/search?custom_back=true&query=${q}`},
+        {tab: 'zeptoTab', url: `https://www.zeptonow.com/search?query=${q}`}
+      ];
+
+      urls.forEach(site => {
+        if (!window[site.tab] || window[site.tab].closed) {
+          window[site.tab] = window.open(site.url, '_blank');
+        } else {
+          window[site.tab].location.href = site.url;
+          window[site.tab].focus();
+        }
+      });
     }
   </script>
 </body>
