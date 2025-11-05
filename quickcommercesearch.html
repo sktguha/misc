@@ -5,17 +5,19 @@
 <title>Multi-Site Search</title>
 </head>
 <body>
-  <h2>Search Items</h2>
-  <input type="text" id="query" placeholder="Enter search term ( example 'chips')">
+  <h2>Search Bluetooth Dongle</h2>
+  <input type="text" id="query" placeholder="Enter search term">
   <br><br>
 
   <button onclick="openBlinkit()">Blinkit</button>
   <button onclick="openSwiggy()">Swiggy</button>
   <button onclick="openZepto()">Zepto</button>
+  <button onclick="openAmazon()">Amazon</button>
   <button onclick="openAll()">Open All</button>
+  <button onclick="openAllWithAmazon()">Amazon+Open All</button>
 
   <script>
-    let blinkitTab, swiggyTab, zeptoTab;
+    let blinkitTab, swiggyTab, zeptoTab, amazonTab;
 
     function getQuery() {
       return encodeURIComponent(document.getElementById('query').value.trim());
@@ -57,25 +59,36 @@
       }
     }
 
-    function openAll() {
+    function openAmazon() {
       const q = getQuery();
       if (!q) return;
-
-      const urls = [
-        {tab: 'blinkitTab', url: `https://blinkit.com/s/?q=${q}`},
-        {tab: 'swiggyTab', url: `https://www.swiggy.com/instamart/search?custom_back=true&query=${q}`},
-        {tab: 'zeptoTab', url: `https://www.zeptonow.com/search?query=${q}`}
-      ];
-
-      urls.forEach(site => {
-        if (!window[site.tab] || window[site.tab].closed) {
-          window[site.tab] = window.open(site.url, '_blank');
-        } else {
-          window[site.tab].location.href = site.url;
-          window[site.tab].focus();
-        }
-      });
+      const url = `https://www.amazon.in/s?k=${q}`;
+      if (!amazonTab || amazonTab.closed) {
+        amazonTab = window.open(url, '_blank');
+      } else {
+        amazonTab.location.href = url;
+        amazonTab.focus();
+      }
     }
+
+    // Original Open All logic preserved
+    function openAll() {
+      openBlinkit();
+      openSwiggy();
+      openZepto();
+    }
+
+    function openAllWithAmazon() {
+      openAll();  // calls original Open All
+      openAmazon(); // adds Amazon
+    }
+
+    // Ctrl + Enter shortcut to trigger original Open All
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.key === 'Enter') {
+        openAll();
+      }
+    });
   </script>
 </body>
 </html>
