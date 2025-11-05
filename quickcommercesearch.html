@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Multi-Site Search</title>
+</head>
+<body>
+  <h2>Search Bluetooth Dongle</h2>
+  <input type="text" id="query" placeholder="Enter search term">
+  <br><br>
+
+  <button onclick="openBlinkit()">Blinkit</button>
+  <button onclick="openSwiggy()">Swiggy</button>
+  <button onclick="openZepto()">Zepto</button>
+  <button onclick="openAll()">Open All</button>
+
+  <script>
+    let blinkitTab, swiggyTab, zeptoTab;
+
+    function getQuery() {
+      return encodeURIComponent(document.getElementById('query').value.trim());
+    }
+
+    function openBlinkit() {
+      const q = getQuery();
+      if (!q) return;
+      const url = `https://blinkit.com/s/?q=${q}`;
+      if (!blinkitTab || blinkitTab.closed) {
+        blinkitTab = window.open(url, '_blank');
+      } else {
+        blinkitTab.location.href = url;
+        blinkitTab.focus();
+      }
+    }
+
+    function openSwiggy() {
+      const q = getQuery();
+      if (!q) return;
+      const url = `https://www.swiggy.com/instamart/search?custom_back=true&query=${q}`;
+      if (!swiggyTab || swiggyTab.closed) {
+        swiggyTab = window.open(url, '_blank');
+      } else {
+        swiggyTab.location.href = url;
+        swiggyTab.focus();
+      }
+    }
+
+    function openZepto() {
+      const q = getQuery();
+      if (!q) return;
+      const url = `https://www.zeptonow.com/search?query=${q}`;
+      if (!zeptoTab || zeptoTab.closed) {
+        zeptoTab = window.open(url, '_blank');
+      } else {
+        zeptoTab.location.href = url;
+        zeptoTab.focus();
+      }
+    }
+
+    function openAll() {
+      openBlinkit();
+      openSwiggy();
+      openZepto();
+    }
+  </script>
+</body>
+</html>
