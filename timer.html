@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -115,7 +116,8 @@
         th, td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #ddd;durationSecsionSecs    }
+            border-bottom: 1px solid #ddd;
+        }
         th {
             background: #667eea;
             color: white;
@@ -388,8 +390,8 @@
                     
                     await saveRun(runData);
                     speak('Timer stopped and saved');
-                    window.location.href='https://www.google.com/search?q=skttimer+'+durationSecs+' '+ new Date().toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata", hour12: true }) +
-", " + new Date().toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "2-digit", month: "long", year: "numeric" });
+                    window.location.href='https://www.google.com/search?q=skttimer+'+durationSecs;
+                }
                 
                 if (timerId) clearInterval(timerId);
                 if (delayTimerId) clearInterval(delayTimerId);
@@ -473,4 +475,4 @@
         });
     </script>
 </body>
-  </html>
+    </html>
