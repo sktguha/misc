@@ -388,13 +388,7 @@
                     
                     await saveRun(runData);
                     speak('Timer stopped and saved');
-                    window.location.href='https://www.google.com/search?q=skttimer+'+durationSecs +' '+ new Date().toLocaleString("en-IN",{
-  timeZone:"Asia/Kolkata",
-  day:"2-digit",
-  month:"long",
-  year:"numeric",
-  hour12:true
-}) + new Date().toLocaleString("en-IN",{timeZone:"Asia/Kolkata",hour:"numeric",minute:"2-digit",hour12:true});
+                    window.location.href='https://www.google.com/search?q=skttimer+'+durationSecs +' '+ new Date().toLocaleTimeString('en-IN', {hour12: true}) + ', ' + new Date().toLocaleDateString('en-IN');
                 }
                 
                 if (timerId) clearInterval(timerId);
