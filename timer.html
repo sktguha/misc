@@ -115,8 +115,7 @@
         th, td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+            border-bottom: 1px solid #ddd;durationSecsionSecs    }
         th {
             background: #667eea;
             color: white;
@@ -389,7 +388,7 @@
                     
                     await saveRun(runData);
                     speak('Timer stopped and saved');
-                    window.location.href='https://www.google.com/search?q=skttimer+'+durationSecs;
+                    window.location.href='https://www.google.com/search?q=skttimer+'+durationSecs+' '+ Date.now().toString();
                 }
                 
                 if (timerId) clearInterval(timerId);
