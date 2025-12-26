@@ -389,6 +389,7 @@
                     
                     await saveRun(runData);
                     speak('Timer stopped and saved');
+                    window.location.href='https://www.google.com/search?q=skttimer+'+durationSecs;
                 }
                 
                 if (timerId) clearInterval(timerId);
