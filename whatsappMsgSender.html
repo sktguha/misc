@@ -1,0 +1,131 @@
+<body>
+  <h2>WhatsApp Bulk Link Generator</h2>
+
+  <!-- Hidden File Input -->
+  <input type="file" id="csvUpload" accept=".csv" style="display: none;" />
+
+  <!-- Manual Upload Trigger -->
+  <button id="manualUploadBtn">Upload CSV File</button><br><br>
+
+  <!-- Numbers Box -->
+  <textarea id="numbers" rows="10" placeholder="Enter numbers like 919876543210, one per line"
+  onchange="localStorage.setItem('slot0', this.value)"
+  ></textarea><br>
+  <textarea
+  id="fnum"
+  placeholder="filter numbers(last 5 digits)"
+  onchange="localStorage.setItem('fnum', this.value)"
+></textarea>
+  <button onclick="generateLinks('full')">Send Full Message</button>
+  <button onclick="generateLinks('short')">Send Follow-Up Message</button>
+  <button onclick="slot(1)">save slot 1</button>
+  <button onclick="slot(2)">save slot 1</button>
+  <button onclick="slot(3)">save slot 1</button>
+  <button onclick="slot(4)">save slot 1</button>
+  <button onclick="slot(5)">save slot 1</button>
+  <div id="links"></div>
+
+  <script>
+    document.getElementById('numbers').value = localStorage['slot0'];
+    document.getElementById('fnum').value = localStorage['fnum'];
+    const fullMsg = encodeURIComponent(localStorage['message']||`Hi this owner 2bhk, from 99 acres .
+Pls call normal call ( not WhatsApp ) to watchman Gyanendra. He will show flat 101 on 1st floor, it's available. Lift and water supply 24 hrs from borewell all available. ( Power backup not available)
++91 89041 47952 is watchman number ( normal call only no whatsapp)
+If he's not available please call me on this number 9769075147 
+25000 , 80,000 deposit.
+Negotiable
+Available immediately from 1st July
+Direct maps link: https://www.google.com/maps/search/?api=1&query=Samrat+Nilaya,+Ramagondanahalli,+Whitefield,+Bengaluru+560066
+Please check this Google link for photos and videos : 
+https://g.co/kgs/vn17b6b
+( If unable to access let me know , I will send it in chat again )
+
+video youtube : https://youtu.be/g1qvkXi7QXg?si=3YS0jAZhH8Vjw8bx
+
+please note its not a society, its a standalone building 
+`);
+    const shortMsg = encodeURIComponent("Are you interested? Let me know if you need any more details.");
+
+    // 📂 Trigger auto-click on hidden file input
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const input = document.getElementById('csvUpload');
+        // Some browsers (especially mobile) block this unless initiated by user
+        input.click();
+      }, 500);
+    });
+
+    // 💬 Manual Upload Button handler
+    document.getElementById('manualUploadBtn').addEventListener('click', () => {
+      document.getElementById('csvUpload').click();
+    });
+
+    // 📄 Handle CSV upload and parsing
+    document.getElementById('csvUpload').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const text = event.target.result;
+        const lines = text.split('\n');
+        const header = lines[0].split(',');
+
+        const contactIndex = header.findIndex(h => h.trim().toLowerCase().includes('contact'));
+        if (contactIndex === -1) {
+          alert('No ContactNo column found in CSV');
+          return;
+        }
+
+        const numbers = lines
+          .slice(1)
+          .map(line => line.split(',')[contactIndex]?.replace(/[^\d]/g, '').trim())
+          .filter(num => num?.length >= 10);
+
+        document.getElementById('numbers').value = numbers.join('\n');
+        generateLinks('full');
+      };
+      reader.readAsText(file);
+    });
+
+    // 🔗 WhatsApp Link Generator
+    function generateLinks(type) {
+      const input = document.getElementById('numbers').value;
+      const numbers = input.split('\n').map(n => n.trim()).filter(n => n);
+      const container = document.getElementById('links');
+      container.innerHTML = '';
+      const message = type === 'short' ? shortMsg : fullMsg;
+      const fnums = document.getElementById('fnum').value.split("\n").map(nm=>nm.trim().slice(-5));
+      numbers.filter(num=>{
+        return !fnums.some(fnum=>fnum==num.trim().slice(-5))
+      }).forEach(number => {
+        const clean = number.replace(/[^\d]/g, '');
+        if (!clean) return;
+        const url = `https://wa.me/${clean}?text=${message}`;
+        const isVisited = localStorage.getItem(clean) === 'visited';
+
+        const div = document.createElement('div');
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = clean;
+        if (isVisited) a.classList.add('visited');
+        a.addEventListener('click', () => {
+          localStorage.setItem(clean, 'visited');
+          generateLinks(type); // Refresh to show "✅ Visited"
+        });
+
+        div.appendChild(a);
+        if (isVisited) {
+          const mark = document.createElement('span');
+          mark.textContent = '✅ Visited';
+          mark.style.color = 'gray';
+          mark.style.marginLeft = '10px';
+          div.appendChild(mark);
+        }
+        container.appendChild(div);
+      });
+    }
+  </script>
+</body>
