@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -335,15 +335,16 @@
         function beginCounting() {
             timerId = setInterval(() => {
                 seconds++;
-                document.getElementById('timer').textContent = seconds;
+                document.getElementById('timer').textContent = (intervals*5) + seconds;
                 
                 if (seconds === 5) {
                     intervals++;
                     document.getElementById('count').textContent = `Intervals: ${intervals} / ${maxIntervals}`;
                     
                     const totalSeconds = intervals * 5;
-                    speak(`${totalSeconds} seconds`);
                     
+                    speak(`${totalSeconds} seconds`);
+                       
                     if (intervals >= maxIntervals) {
                         const endTime = new Date();
                         const durationSecs = Math.floor((endTime - startTime) / 1000);
