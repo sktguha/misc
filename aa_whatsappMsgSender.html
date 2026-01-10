@@ -39,7 +39,7 @@
     }
     function load(id){ document.getElementById('numbers').value = localStorage['slot'+id];}
     // document.getElementById('numbers').value = localStorage['slot0']||'';
-    document.getElementById('fnum').value = localStorage['fnum']||'';
+    document.getElementById('fnum').value = (localStorage['fnum']||'').trim();
     const fullMsg = encodeURIComponent(localStorage['message']||`Hi this owner 2bhk, from 99 acres .
 Pls call normal call ( not WhatsApp ) to watchman Gyanendra. He will show flat 101 on 1st floor, it's available. Lift and water supply 24 hrs from borewell all available. ( Power backup not available)
 +91 89041 47952 is watchman number ( normal call only no whatsapp)
