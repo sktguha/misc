@@ -20,8 +20,14 @@
   <iframe id="fr"></iframe>
   <script>
     function run(){
-      document.getElementById("fr").innerHTML = document.getElementById("main").value;
-    }
+  const fr = document.getElementById("fr");
+  fr.contentDocument.open();
+  fr.contentDocument.write(
+    document.getElementById("main").value
+  );
+  fr.contentDocument.close();
+}
+
     function slot(id){ 
       if(document.getElementById('numbers').value.trim()){
         localStorage['slot'+id]=document.getElementById('numbers').value;
