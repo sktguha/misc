@@ -14,7 +14,7 @@
   <textarea
   id="fnum"
   placeholder="filter numbers(last 5 digits)"
-  onchange="localStorage.setItem('fnum', this.value)"
+  onchange="if(this.value) { localStorage.setItem('fnum', this.value) } "
 ></textarea>
   <br/><button onclick="generateLinks('full')">Send Full Message</button>
   <button onclick="generateLinks('short')">Send Follow-Up Message</button>
