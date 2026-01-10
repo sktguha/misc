@@ -33,12 +33,12 @@
   <button onclick="load(5)">load 5 (largest try here)</button>
   <div id="links"></div>
                 <br/><br/><br/><br/><br/>
-  <button onclick="window.prompt('',localStorage['message'])">view message main</button>
-  <button onclick="window.prompt('',localStorage['message1'])">view message 1</button>
-  <button onclick="window.prompt('',localStorage['message2'])">view message 2</button>
-  <button onclick="window.prompt('',localStorage['message3'])">view message 3</button>
+  <button onclick="window.prompt(localStorage['message'],localStorage['message'])" style="zoom:1.3">view message main</button>
+  <button onclick="window.prompt(localStorage['message1'],localStorage['message1'])">view message 1</button>
+  <button onclick="window.prompt(localStorage['message2'],localStorage['message2'])">view message 2</button>
+  <button onclick="window.prompt(localStorage['message3'],localStorage['message3'])">view message 3</button>
 
-<button onclick="const txt = window.prompt('enter. reload is needed so links regenerate . cancel to exit'); if (txt) localStorage['message'] = txt;">
+<button style="zoom:1.3" onclick="const txt = window.prompt('enter. reload is needed so links regenerate . cancel to exit'); if (txt) { localStorage['message'] = txt; if(window.confirm('ok to reload ? press cancel to cancel')) { location.reload(); }}">
   set message main
 </button>
 
