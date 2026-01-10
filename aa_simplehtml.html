@@ -1,10 +1,13 @@
-<html></html>
+  <html></html>
 <body>
   <textarea
   id="main"
+style="width:100%"
   placeholder="enter html"
   onchange="if(this.value) { localStorage.setItem('slot1', this.value) }">
   </textarea>
+  <br/>
+  <button onclick="run()" style="zoom:1.3">Run</button><br/>
   <br/>
   <button onclick="slot(1)">save 1(recent one)</button>
   <button onclick="slot(2)">save 2</button>
@@ -17,8 +20,7 @@
   <button onclick="load(3)">load 3</button>
   <button onclick="load(4)">load 4</button>
   <button onclick="load(5)">load 5 (largest try here)</button>
-  <button onclick="run()">Run</button><br/>
-  <iframe id="fr"></iframe>
+  <iframe id="fr" style="width:100%"></iframe>
   <script>
     function run(){
   const fr = document.getElementById("fr");
