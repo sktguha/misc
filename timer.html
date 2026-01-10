@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -152,7 +152,7 @@
         <div class="status" id="status"></div>
         <div>
             <button class="start" onclick="startTimer()">Start</button>
-            <button class="stop" onclick="stopTimer()">Stop</button>
+            <button class="stop" onclick="document.body.style.backgroundColor='blue';stopTimer();">Stop</button>
             <button class="reset" onclick="resetTimer()">Reset</button>
             <button class="view" onclick="viewRuns()">View Runs</button>
         </div>
@@ -300,7 +300,7 @@
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.rate = 1;
                     utterance.pitch = 1;
-                    utterance.volume = 1;
+                    utterance.volume = 5;
                     window.speechSynthesis.speak(utterance);
                 }
             } catch (error) {
@@ -341,7 +341,7 @@
                     intervals++;
                     document.getElementById('count').textContent = `Intervals: ${intervals} / ${maxIntervals}`;
                     
-                    const totalSeconds = intervals * 10;
+                    const totalSeconds = intervals * 5;
                     speak(`${totalSeconds} seconds`);
                     
                     if (intervals >= maxIntervals) {
