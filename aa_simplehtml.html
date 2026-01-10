@@ -5,6 +5,7 @@
   placeholder="enter html"
   onchange="if(this.value) { localStorage.setItem('slot1', this.value) }">
   </textarea>
+  <br/>
   <button onclick="slot(1)">save 1(recent one)</button>
   <button onclick="slot(2)">save 2</button>
   <button onclick="slot(3)">save 3</button>
@@ -16,7 +17,7 @@
   <button onclick="load(3)">load 3</button>
   <button onclick="load(4)">load 4</button>
   <button onclick="load(5)">load 5 (largest try here)</button>
-  <button onclick="run()">Run</button>
+  <button onclick="run()">Run</button><br/>
   <iframe id="fr"></iframe>
   <script>
     function run(){
@@ -29,10 +30,10 @@
 }
 
     function slot(id){ 
-      if(document.getElementById('numbers').value.trim()){
-        localStorage['slot'+id]=document.getElementById('numbers').value;
+      if(document.getElementById('main').value.trim()){
+        localStorage['slot'+id]=document.getElementById('main').value;
       }
     }
-    function load(id){ document.getElementById('numbers').value = localStorage['slot'+id];}
+    function load(id){ document.getElementById('main').value = localStorage['slot'+id];}
   </script>
 </body>
