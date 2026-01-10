@@ -16,8 +16,10 @@
   placeholder="filter numbers(last 5 digits)"
   onchange="if(this.value) { localStorage.setItem('fnum', this.value) } "
 ></textarea>
-  <br/><button onclick="generateLinks('full')">Send Full Message</button>
-  <button onclick="generateLinks('short')">Send Follow-Up Message</button>
+  <br/>
+  <button onclick="generateLinks('full')" style="zoom:1.2">Send Full Message</button>
+  <button onclick="generateLinks('short')" style="zoom:1.2">Send Follow-Up Message</button>
+  <br/>
   <button onclick="slot(1)">save 1(recent one)</button>
   <button onclick="slot(2)">save 2</button>
   <button onclick="slot(3)">save 3</button>
