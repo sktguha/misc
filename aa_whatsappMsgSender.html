@@ -1,4 +1,4 @@
-      <body>
+              <body>
   <h2>WhatsApp Bulk Link Generator</h2>
 
   <!-- Hidden File Input -->
@@ -32,7 +32,26 @@
   <button onclick="load(4)">load 4</button>
   <button onclick="load(5)">load 5 (largest try here)</button>
   <div id="links"></div>
+  <button onclick="window.alert(localStorage['message'])">view message main</button>
+  <button onclick="window.alert(localStorage['message1'])">view message 1</button>
+  <button onclick="window.alert(localStorage['message2'])">view message 2</button>
+  <button onclick="window.alert(localStorage['message3'])">view message 3</button>
 
+<button onclick="const txt = window.prompt('enter. cancel to exit'); if (txt) localStorage['message'] = txt;">
+  set message main
+</button>
+
+<button onclick="const txt = window.prompt('1. enter. cancel to exit'); if (txt) localStorage['message1'] = txt;">
+  set message 1
+</button>
+
+<button onclick="const txt = window.prompt('2. enter. cancel to exit'); if (txt) localStorage['message2'] = txt;">
+  set message 2
+</button>
+
+<button onclick="const txt = window.prompt('3. enter. cancel to exit'); if (txt) localStorage['message3'] = txt;">
+  set message 3
+</button>
   <script>
     function slot(id){ 
       if(document.getElementById('numbers').value.trim()){
