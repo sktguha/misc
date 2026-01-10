@@ -135,6 +135,7 @@ please note its not a society, its a standalone building
           e.preventDefault();          // stop browser menu
           const fnum = document.getElementById('fnum').value;
           document.getElementById('fnum').value = fnum + '\n'+ clean;
+          localStorage['fnum'] = fnum + '\n'+ clean;
           setTimeout(()=> generateLinks(type), 200);
         });
 
