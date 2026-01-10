@@ -1,4 +1,4 @@
-<body>
+      <body>
   <h2>WhatsApp Bulk Link Generator</h2>
 
   <!-- Hidden File Input -->
@@ -129,10 +129,30 @@ please note its not a society, its a standalone building
           localStorage.setItem(clean, 'visited');
           generateLinks(type); // Refresh to show "✅ Visited"
         });
-        a.addEventListener('click', () => {
-          localStorage.setItem(clean, 'visited');
-          generateLinks(type); // Refresh to show "✅ Visited"
-        });
+a.addEventListener('click', () => {
+  document.querySelectorAll('a').forEach(x => {
+    x.style.background = '';
+    x.style.color = '';
+  });
+
+  localStorage.setItem(clean, 'visited');
+  generateLinks(type);
+ setTimeout(() => {
+  document.querySelectorAll('a').forEach(x => {
+    x.style.background = '';
+    x.style.color = '';
+  });
+
+  const a = [...document.querySelectorAll('a')]
+    .find(x => x.textContent.trim() === String(clean));
+
+  if (a) {
+    a.style.background = 'yellow';
+    a.style.color = 'black';
+  }
+}, 300);
+});
+
         a.addEventListener('contextmenu', e => {
           e.preventDefault();          // stop browser menu
           const fnum = document.getElementById('fnum').value;
