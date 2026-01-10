@@ -32,7 +32,11 @@
   <div id="links"></div>
 
   <script>
-    function slot(id){ localStorage['slot'+id]=document.getElementById('numbers').value;}
+    function slot(id){ 
+      if(document.getElementById('numbers').value.trim()){
+        localStorage['slot'+id]=document.getElementById('numbers').value;
+      }
+    }
     function load(id){ document.getElementById('numbers').value = localStorage['slot'+id];}
     // document.getElementById('numbers').value = localStorage['slot0']||'';
     document.getElementById('fnum').value = localStorage['fnum']||'';
