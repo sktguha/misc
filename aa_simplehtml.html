@@ -20,6 +20,15 @@ style="width:100%"
   <button onclick="load(3)">load 3</button>
   <button onclick="load(4)">load 4</button>
   <button onclick="load(5)">load 5 (largest try here)</button>
+<button onclick="
+  const html = document.getElementById('main').value;
+  const a = document.createElement('a');
+  a.href = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
+  a.download = 'page.html';
+  a.click();
+">
+Download html page
+</button>
   <iframe id="fr" style="width:100%"></iframe>
   <script>
     function run(){
