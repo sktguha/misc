@@ -33,10 +33,10 @@
   <button onclick="load(5)">load 5 (largest try here)</button>
   <div id="links"></div>
                 <br/><br/><br/><br/><br/>
-  <button onclick="window.alert(localStorage['message'])">view message main</button>
-  <button onclick="window.alert(localStorage['message1'])">view message 1</button>
-  <button onclick="window.alert(localStorage['message2'])">view message 2</button>
-  <button onclick="window.alert(localStorage['message3'])">view message 3</button>
+  <button onclick="window.prompt(localStorage['message'])">view message main</button>
+  <button onclick="window.prompt(localStorage['message1'])">view message 1</button>
+  <button onclick="window.prompt(localStorage['message2'])">view message 2</button>
+  <button onclick="window.prompt(localStorage['message3'])">view message 3</button>
 
 <button onclick="const txt = window.prompt('enter. reload is needed so links regenerate . cancel to exit'); if (txt) localStorage['message'] = txt;">
   set message main
