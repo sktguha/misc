@@ -123,6 +123,16 @@ please note its not a society, its a standalone building
           localStorage.setItem(clean, 'visited');
           generateLinks(type); // Refresh to show "✅ Visited"
         });
+        a.addEventListener('click', () => {
+          localStorage.setItem(clean, 'visited');
+          generateLinks(type); // Refresh to show "✅ Visited"
+        });
+        a.addEventListener('contextmenu', e => {
+          e.preventDefault();          // stop browser menu
+          const fnum = document.getElementById('fnum').value;
+          document.getElementById('fnum').value = fnum + '\n'+ clean;
+          setTimeout(()=> generateLinks(type), 200);
+        });
 
         div.appendChild(a);
         if (isVisited) {
