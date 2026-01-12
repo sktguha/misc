@@ -1,0 +1,76 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Conversation JSON → TXT</title>
+  <style>
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      padding: 20px;
+    }
+    button {
+      margin-top: 12px;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h3>Upload conversation JSON</h3>
+
+  <input type="file" id="file" accept=".json" />
+  <br />
+  <button onclick="process()">Create TXT</button>
+
+  <script>
+    function process() {
+      const fileInput = document.getElementById("file");
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const data = JSON.parse(reader.result);
+        const output = [];
+
+        for (const msg of data.messages || []) {
+          for (const v of msg.versions || []) {
+
+            // singleStep
+            if (v.type === "singleStep") {
+              for (const c of v.content || []) {
+                if (c.type === "text") output.push(c.text);
+              }
+            }
+
+            // multiStep
+            if (v.type === "multiStep") {
+              for (const step of v.steps || []) {
+                for (const c of step.content || []) {
+                  if (c.type === "text") output.push(c.text);
+                }
+              }
+            }
+          }
+        }
+
+        const blob = new Blob(
+          [output.join("\n\n")],
+          { type: "text/plain" }
+        );
+
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "extracted.txt";
+        a.click();
+        URL.revokeObjectURL(a.href);
+      };
+
+      reader.readAsText(file);
+    }
+  </script>
+
+</body>
+  </html>
