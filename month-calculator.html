@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Month Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e7f3ff;
+            border-radius: 4px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>11-Month Period Calculator</h2>
+        
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" value="2026-01-01">
+        
+        <label for="monthSelect">Select Month Offset:</label>
+        <select id="monthSelect">
+            <option value="11" selected>11 months</option>
+        </select>
+        
+        <button onclick="calculate()">Calculate End Date</button>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function calculate() {
+            const startDateInput = document.getElementById('startDate').value;
+            if (!startDateInput) {
+                alert('Please select a start date');
+                return;
+            }
+
+            const startDate = new Date(startDateInput);
+            const monthsToAdd = parseInt(document.getElementById('monthSelect').value);
+            
+            // Add the months to get to the target month
+            const endDate = new Date(startDate);
+            endDate.setMonth(endDate.getMonth() + monthsToAdd);
+            
+            // Get the last day of that month
+            endDate.setMonth(endDate.getMonth() + 1);
+            endDate.setDate(0);
+            
+            // Format the dates
+            const formatDate = (date) => {
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}.${month}.${year}`;
+            };
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <strong>Start Date:</strong> ${formatDate(startDate)}<br>
+                <strong>End Date (after ${monthsToAdd} months):</strong> ${formatDate(endDate)}
+            `;
+            resultDiv.classList.add('show');
+        }
+        
+        // Calculate on page load with default date
+        window.onload = function() {
+            calculate();
+        };
+    </script>
+</body>
+</html>
