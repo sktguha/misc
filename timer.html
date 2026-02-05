@@ -1,111 +1,26 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10 Second Timer</title>
+    <title>Timer App</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
             font-family: Arial, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            max-width: 600px;
+            margin: 50px auto;
             padding: 20px;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
         .timer {
-            font-size: 72px;
-            font-weight: bold;
-            color: #667eea;
+            font-size: 48px;
             margin: 20px 0;
-        }
-        .count {
-            font-size: 24px;
-            color: #666;
-            margin: 10px 0;
-        }
-        .status {
-            font-size: 20px;
-            color: #e67e22;
-            margin: 15px 0;
             font-weight: bold;
-            min-height: 30px;
         }
         button {
-            font-size: 18px;
-            padding: 15px 30px;
-            margin: 10px;
-            border: none;
-            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-        .start {
-            background: #667eea;
-            color: white;
-        }
-        .start:hover {
-            background: #5568d3;
-        }
-        .stop {
-            background: #e74c3c;
-            color: white;
-        }
-        .stop:hover {
-            background: #c0392b;
-        }
-        .reset {
-            background: #95a5a6;
-            color: white;
-        }
-        .reset:hover {
-            background: #7f8c8d;
-        }
-        .view {
-            background: #27ae60;
-            color: white;
-        }
-        .view:hover {
-            background: #229954;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            overflow: auto;
-        }
-        .modal-content {
-            background: white;
-            margin: 50px auto;
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 90%;
-            max-height: 80vh;
-            overflow: auto;
-        }
-        .close {
-            float: right;
-            font-size: 32px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #666;
-        }
-        .close:hover {
-            color: #000;
         }
         table {
             width: 100%;
@@ -113,379 +28,135 @@
             margin-top: 20px;
         }
         th, td {
-            padding: 12px;
+            border: 1px solid #ddd;
+            padding: 8px;
             text-align: left;
-            border-bottom: 1px solid #ddd;durationSecsionSecs    }
+        }
         th {
-            background: #667eea;
-            color: white;
-            font-weight: bold;
-        }
-        tr:hover {
-            background: #f5f5f5;
-        }
-        .completed {
-            color: #27ae60;
-            font-weight: bold;
-        }
-        .incomplete {
-            color: #e67e22;
-        }
-        .no-data {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-            font-size: 18px;
-        }
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #667eea;
+            background-color: #f2f2f2;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>10 Second Timer</h1>
-        <div class="timer" id="timer">0</div>
-        <div class="count" id="count">Intervals: 0 / 60</div>
-        <div class="status" id="status"></div>
-        <div>
-            <button class="start" onclick="startTimer()">Start</button>
-            <button class="stop" onclick="document.body.style.background='blue';stopTimer();">Stop</button>
-            <button class="reset" onclick="resetTimer()">Reset</button>
-            <button class="view" onclick="viewRuns()">View Runs</button>
-        </div>
-    </div>
-
-    <div id="runsModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Timer Runs History</h2>
-            <div id="runsTable"></div>
-        </div>
-    </div>
+    <div class="timer" id="timer">0</div>
+    
+    <button id="startBtn" onclick="startTimer()">Start</button>
+    <button id="stopBtn" onclick="stopTimer()" disabled>Stop</button>
+    <button onclick="resetTimer()">Reset</button>
+    
+    <br><br>
+    <button onclick="showHistory()">Show History</button>
+    
+    <br><br>
+    <textarea id="notes" placeholder="Enter notes here..." rows="4" style="width: 100%; padding: 8px;"></textarea>
+    
+    <table id="historyTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Time Taken</th>
+            </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+    </table>
 
     <script>
-        let seconds = 0;
-        let intervals = 0;
-        let timerId = null;
-        let delayTimerId = null;
+        let counter = 0;
+        let interval = null;
         let startTime = null;
-        const maxIntervals = 60;
-        const delaySeconds = 5;
-        
-        const API_KEY = '$2a$10$Fgy9zD1QbgdxuzHf2JFwKuZR8wFKzisM8bZTN5eTeCr4aSCjk.lsO';
-        const COLLECTION_ID = '694d1f92ae596e708fb0083b';
-        let binId = null;
-
-        async function initializeBin() {
-            // Create a new bin in the specified collection
-            try {
-                const response = await fetch('https://api.jsonbin.io/v3/b', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY,
-                        'X-Collection-Id': COLLECTION_ID
-                    },
-                    body: JSON.stringify({ runs: [] })
-                });
-                const data = await response.json();
-                binId = data.metadata.id;
-                console.log('Bin created:', binId);
-                return true;
-            } catch (error) {
-                console.error('Error initializing bin:', error);
-                return false;
-            }
-        }
-
-        async function loadRuns() {
-            try {
-                if (!binId) {
-                    // Try to get bins from collection
-                    const response = await fetch(`https://api.jsonbin.io/v3/c/${COLLECTION_ID}/bins`, {
-                        headers: {
-                            'X-Master-Key': API_KEY
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.length > 0) {
-                            // Use the first bin in collection
-                            binId = data[0].record;
-                        } else {
-                            // No bins yet, will create on first save
-                            return [];
-                        }
-                    }
-                }
-                
-                if (binId) {
-                    const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-                        headers: {
-                            'X-Master-Key': API_KEY
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        return data.record.runs || [];
-                    }
-                }
-                
-                return [];
-            } catch (error) {
-                console.error('Error loading runs:', error);
-                return [];
-            }
-        }
-
-        async function saveRun(runData) {
-            try {
-                // If no bin exists, create one in the collection
-                if (!binId) {
-                    await initializeBin();
-                }
-                
-                const runs = await loadRuns();
-                runs.push(runData);
-                
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify({ runs: runs })
-                });
-                
-                if (response.ok) {
-                    console.log('Run saved successfully to collection');
-                } else {
-                    console.error('Failed to save run');
-                }
-            } catch (error) {
-                console.error('Error saving run:', error);
-            }
-        }
-
-        function getIndianDateTime() {
-            const date = new Date();
-            const options = {
-                timeZone: 'Asia/Kolkata',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-            };
-            return new Intl.DateTimeFormat('en-IN', options).format(date);
-        }
-
-        function formatDuration(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
-        }
+        let startTimestamp = null;
 
         function speak(text) {
-            try {
-                if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.rate = 1;
-                    utterance.pitch = 1;
-                    utterance.volume = 5;
-                    window.speechSynthesis.speak(utterance);
-                }
-            } catch (error) {
-                console.error('Speech error:', error);
-            }
+            const utterance = new SpeechSynthesisUtterance(text.toString());
+            speechSynthesis.speak(utterance);
         }
 
         function startTimer() {
-            if (timerId || delayTimerId) return;
-            
-            let remainingDelay = delaySeconds;
-            document.getElementById('status').textContent = `Starting in ${delaySeconds} seconds...`;
-            
-            speak(`Timer will start in ${delaySeconds} seconds`);
-            
-            delayTimerId = setInterval(() => {
-                remainingDelay--;
-                document.getElementById('status').textContent = `Starting in ${remainingDelay} seconds...`;
+            counter = 0;
+            startTime = new Date().toLocaleString();
+            startTimestamp = Date.now();
+            document.getElementById('timer').textContent = counter;
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+
+            // Display updates every second
+            interval = setInterval(() => {
+                counter++;
+                document.getElementById('timer').textContent = counter;
                 
-                if (remainingDelay <= 0) {
-                    clearInterval(delayTimerId);
-                    delayTimerId = null;
-                    document.getElementById('status').textContent = 'Timer running!';
-                    
-                    speak('Timer starting now');
-                    startTime = new Date();
-                    beginCounting();
+                // Speak at 2, 4, 6, 7, 8, 9, 10
+                if (counter <= 6 && counter % 2 === 0) {
+                    speak(counter);
+                } else if (counter >= 7) {
+                    speak(counter);
                 }
             }, 1000);
         }
 
-        function beginCounting() {
-            timerId = setInterval(() => {
-                seconds++;
-                document.getElementById('timer').textContent = (intervals*5) + seconds;
-                
-                if (seconds === 5) {
-                    intervals++;
-                    document.getElementById('count').textContent = `Intervals: ${intervals} / ${maxIntervals}`;
-                    
-                    const totalSeconds = intervals * 5;
-                    
-                    speak(`${totalSeconds} seconds`);
-                       
-                    if (intervals >= maxIntervals) {
-                        const endTime = new Date();
-                        const durationSecs = Math.floor((endTime - startTime) / 1000);
-                        
-                        const runData = {
-                            startDateTime: getIndianDateTime(),
-                            endDateTime: getIndianDateTime(),
-                            durationSeconds: durationSecs,
-                            intervalsCompleted: intervals,
-                            totalSecondsAnnounced: intervals * 10,
-                            completed: true,
-                            timestamp: new Date().toISOString()
-                        };
-                        
-                        saveRun(runData);
-                        clearInterval(timerId);
-                        timerId = null;
-                        speak('Timer complete and saved');
-                        return;
-                    }
-                    
-                    seconds = 0;
-                }
-            }, 1000);
+        function stopTimer() {
+            if (interval) {
+                clearInterval(interval);
+                interval = null;
+            }
+            
+            const endTime = new Date().toLocaleString();
+            const endTimestamp = Date.now();
+            const timeTaken = ((endTimestamp - startTimestamp) / 1000).toFixed(1) + 's';
+            
+            // Save to localStorage
+            let runs = JSON.parse(localStorage.getItem('runs') || '[]');
+            runs.push({ start: startTime, end: endTime, duration: timeTaken });
+            localStorage.setItem('runs', JSON.stringify(runs));
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
         }
 
-        async function stopTimer() {
-            if (timerId || delayTimerId) {
-                if (startTime && timerId) {
-                    const endTime = new Date();
-                    const durationSecs = Math.floor((endTime - startTime) / 1000);
-                    
-                    const runData = {
-                        startDateTime: getIndianDateTime(),
-                        endDateTime: getIndianDateTime(),
-                        durationSeconds: durationSecs,
-                        intervalsCompleted: intervals,
-                        totalSecondsAnnounced: intervals * 10,
-                        completed: false,
-                        timestamp: new Date().toISOString()
-                    };
-                    
-                    await saveRun(runData);
-                    speak('Timer stopped and saved');
-                    window.location.href='https://www.google.com/search?q=skttimer+'+durationSecs +' '+ new Date().toLocaleTimeString('en-IN', {hour12: true}) + ', ' + new Date().toLocaleDateString('en-IN');
-                }
+        function showHistory() {
+            const table = document.getElementById('historyTable');
+            const tbody = document.getElementById('historyBody');
+            
+            if (table.style.display === 'none') {
+                const runs = JSON.parse(localStorage.getItem('runs') || '[]');
+                tbody.innerHTML = '';
                 
-                if (timerId) clearInterval(timerId);
-                if (delayTimerId) clearInterval(delayTimerId);
-                timerId = null;
-                delayTimerId = null;
-                document.getElementById('status').textContent = '';
+                runs.forEach(run => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = run.start;
+                    row.insertCell(1).textContent = run.end;
+                    row.insertCell(2).textContent = run.duration || 'N/A';
+                });
+                
+                table.style.display = 'table';
+            } else {
+                table.style.display = 'none';
             }
         }
 
         function resetTimer() {
-            stopTimer();
-            seconds = 0;
-            intervals = 0;
-            startTime = null;
-            document.getElementById('timer').textContent = '0';
-            document.getElementById('count').textContent = 'Intervals: 0 / 60';
-            document.getElementById('status').textContent = '';
-        }
-
-        async function viewRuns() {
-            const tableDiv = document.getElementById('runsTable');
-            tableDiv.innerHTML = '<div class="loading">Loading runs...</div>';
-            
-            const runs = await loadRuns();
-            
-            if (runs.length === 0) {
-                tableDiv.innerHTML = '<div class="no-data">No timer runs recorded yet</div>';
-            } else {
-                let tableHTML = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
-                                <th>Duration</th>
-                                <th>Intervals</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                
-                runs.reverse().forEach((run, index) => {
-                    const statusClass = run.completed ? 'completed' : 'incomplete';
-                    const statusText = run.completed ? 'Completed' : 'Stopped Early';
-                    tableHTML += `
-                        <tr>
-                            <td>${runs.length - index}</td>
-                            <td>${run.startDateTime}</td>
-                            <td>${run.endDateTime}</td>
-                            <td>${formatDuration(run.durationSeconds)}</td>
-                            <td>${run.intervalsCompleted} / 60</td>
-                            <td class="${statusClass}">${statusText}</td>
-                        </tr>
-                    `;
-                });
-                
-                tableHTML += '</tbody></table>';
-                tableDiv.innerHTML = tableHTML;
-                tableDiv.oncontextmenu = function () {
-  const html =
-    "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Table</title></head><body>" +
-    tableDiv.outerHTML +
-    "</body></html>";
-
-  const blob = new Blob([html], { type: "text/html;charset=utf-8" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "table.html";
-  a.click();
-  URL.revokeObjectURL(a.href);
-
-  return false;
-};
+            if (interval) {
+                clearInterval(interval);
+                interval = null;
             }
-            
-            document.getElementById('runsModal').style.display = 'block';
+            counter = 0;
+            document.getElementById('timer').textContent = counter;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
         }
 
-        function closeModal() {
-            document.getElementById('runsModal').style.display = 'none';
-        }
+        // Load notes from localStorage on startup
+        window.onload = function() {
+            const savedNotes = localStorage.getItem('notes') || '';
+            document.getElementById('notes').value = savedNotes;
+        };
 
-        window.onclick = function(event) {
-            const modal = document.getElementById('runsModal');
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
-
-        // Initialize bin on page load
-        window.addEventListener('load', async () => {
-            // Try to load existing bins from collection
-            await loadRuns();
+        // Save notes to localStorage when typing
+        document.addEventListener('DOMContentLoaded', function() {
+            const notesArea = document.getElementById('notes');
+            notesArea.addEventListener('input', function() {
+                localStorage.setItem('notes', notesArea.value);
+            });
         });
     </script>
 </body>
