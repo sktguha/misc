@@ -59,6 +59,159 @@
     <div class="container">
         <h2>11-Month Period Calculator</h2>
         
+        <label for="daySelect">Day:</label>
+        <select id="daySelect" onchange="calculate()">
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+            <option value="24">24</option>
+            <option value="25">25</option>
+            <option value="26">26</option>
+            <option value="27">27</option>
+            <option value="28">28</option>
+            <option value="29">29</option>
+            <option value="30">30</option>
+            <option value="31">31</option>
+        </select>
+        
+        <label for="monthSelect">Month:</label>
+        <select id="monthSelect" onchange="calculate()">
+            <option value="1" selected>January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+        
+        <label for="yearSelect">Year:</label>
+        <select id="yearSelect" onchange="calculate()">
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026" selected>2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+        </select>
+        
+        <div id="result" class="result"></div>
+        
+        <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    </div>
+
+    <script>
+        function calculate() {
+            const day = parseInt(document.getElementById('daySelect').value);
+            const month = parseInt(document.getElementById('monthSelect').value);
+            const year = parseInt(document.getElementById('yearSelect').value);
+            
+            const startDate = new Date(year, month - 1, day);
+            
+            // Add 10 months (not 11) to get to the 11th month including the start month
+            // Example: April (month 1) + 10 months = February (month 11)
+            const endDate = new Date(startDate);
+            endDate.setMonth(endDate.getMonth() + 10);
+            
+            // Get the last day of that month
+            endDate.setMonth(endDate.getMonth() + 1);
+            endDate.setDate(0);
+            
+            // Format the dates
+            const formatDate = (date) => {
+                const day = date.getDate();
+                const month = date.getMonth() + 1;
+                const year = date.getFullYear();
+                return `${day}.${month}.${year}`;
+            };
+            
+            const startFormatted = formatDate(startDate);
+            const endFormatted = formatDate(endDate);
+            const resultText = `${startFormatted} to ${endFormatted}`;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<strong>${resultText}</strong>`;
+            resultDiv.classList.add('show');
+            
+            // Store for clipboard
+            window.currentResult = resultText;
+        }
+        
+        function copyToClipboard() {
+            if (window.currentResult) {
+                navigator.clipboard.writeText(window.currentResult).then(() => {
+                    alert('Copied to clipboard: ' + window.currentResult);
+                }).catch(err => {
+                    // Fallback for older browsers
+                    const textarea = document.createElement('textarea');
+                    textarea.value = window.currentResult;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    alert('Copied to clipboard: ' + window.currentResult);
+                });
+            }
+        }
+        
+        // Calculate on page load with default date
+        window.onload = function() {
+            calculate();
+        };
+    </script>
+</body>
+</html>
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e7f3ff;
+            border-radius: 4px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>11-Month Period Calculator</h2>
+        
         <label for="startDate">Start Date:</label>
         <input type="date" id="startDate" value="2026-01-01">
         
