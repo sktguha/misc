@@ -2,79 +2,162 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timer App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .timer {
+            font-size: 48px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
-<body style="font-family:Arial;max-width:600px;margin:50px auto;">
+<body>
+    <div class="timer" id="timer">0</div>
+    
+    <button id="startBtn" onclick="startTimer()">Start</button>
+    <button id="stopBtn" onclick="stopTimer()" disabled>Stop</button>
+    <button onclick="resetTimer()">Reset</button>
+    
+    <br><br>
+    <button onclick="showHistory()">Show History</button>
+    
+    <br><br>
+    <textarea id="notes" placeholder="Enter notes here..." rows="4" style="width: 100%; padding: 8px;"></textarea>
+    
+    <table id="historyTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Time Taken</th>
+            </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+    </table>
 
-<div id="timer" style="font-size:48px;font-weight:bold;">0</div>
+    <script>
+        let counter = 0;
+        let interval = null;
+        let startTime = null;
+        let startTimestamp = null;
 
-<button id="startBtn" onclick="startTimer()" style="background:green;color:white;">Start</button>
-<button id="stopBtn" onclick="stopTimer()" disabled style="background:red;color:white;">Stop</button>
-<button onclick="resetTimer()" style="background:orange;color:white;">Reset</button>
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text.toString());
+            speechSynthesis.speak(utterance);
+        }
 
-<script>
-let counter = 0;
-let interval = null;
-let startTime = null;
-let startTimestamp = null;
-
-function speak(text) {
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text.toString());
-    speechSynthesis.speak(u);
-}
-
-function startTimer() {
-    let countdown = 5;
-    speak("Timer should start in 5 seconds");
-
-    const pre = setInterval(() => {
-        countdown--;
-        if (countdown > 0) speak(countdown);
-
-        if (countdown === 0) {
-            clearInterval(pre);
-
+        function startTimer() {
             counter = 0;
             startTime = new Date().toLocaleString();
             startTimestamp = Date.now();
+            document.getElementById('timer').textContent = counter;
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
 
-            document.getElementById("startBtn").disabled = true;
-            document.getElementById("stopBtn").disabled = false;
-
+            // Display updates every second
             interval = setInterval(() => {
                 counter++;
-                document.getElementById("timer").textContent = counter;
-
-                let speakText = counter === 30 ? "three zero" : counter;
-
-                if (counter === 2 || counter === 4 || counter === 6 || (counter >= 7 && counter <= 10)) {
-                    speak(speakText);
+                document.getElementById('timer').textContent = counter;
+                
+                // Speak at 2, 4, 6, 7, 8, 9, 10
+                if (counter <= 6 && counter % 2 === 0) {
+                    speak(counter);
+                } else if (counter >= 7) {
+                    speak(counter);
                 }
             }, 1000);
         }
-    }, 1000);
-}
 
-function stopTimer() {
-    if (interval) clearInterval(interval);
-    interval = null;
+        function stopTimer() {
+            if (interval) {
+                clearInterval(interval);
+                interval = null;
+            }
+            
+            const endTime = new Date().toLocaleString();
+            const endTimestamp = Date.now();
+            const timeTaken = ((endTimestamp - startTimestamp) / 1000).toFixed(1) + 's';
+            
+            // Save to localStorage
+            let runs = JSON.parse(localStorage.getItem('runs') || '[]');
+            runs.push({ start: startTime, end: endTime, duration: timeTaken });
+            localStorage.setItem('runs', JSON.stringify(runs));
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+        }
 
-    document.getElementById("startBtn").disabled = false;
-    document.getElementById("stopBtn").disabled = true;
-}
+        function showHistory() {
+            const table = document.getElementById('historyTable');
+            const tbody = document.getElementById('historyBody');
+            
+            if (table.style.display === 'none') {
+                const runs = JSON.parse(localStorage.getItem('runs') || '[]');
+                tbody.innerHTML = '';
+                
+                runs.forEach(run => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = run.start;
+                    row.insertCell(1).textContent = run.end;
+                    row.insertCell(2).textContent = run.duration || 'N/A';
+                });
+                
+                table.style.display = 'table';
+            } else {
+                table.style.display = 'none';
+            }
+        }
 
-function resetTimer() {
-    if (interval) clearInterval(interval);
-    interval = null;
-    counter = 0;
-    startTime = null;
-    startTimestamp = null;
-    document.getElementById("timer").textContent = 0;
-    document.getElementById("startBtn").disabled = false;
-    document.getElementById("stopBtn").disabled = true;
-}
-</script>
+        function resetTimer() {
+            if (interval) {
+                clearInterval(interval);
+                interval = null;
+            }
+            counter = 0;
+            document.getElementById('timer').textContent = counter;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+        }
 
+        // Load notes from localStorage on startup
+        window.onload = function() {
+            const savedNotes = localStorage.getItem('notes') || '';
+            document.getElementById('notes').value = savedNotes;
+        };
+
+        // Save notes to localStorage when typing
+        document.addEventListener('DOMContentLoaded', function() {
+            const notesArea = document.getElementById('notes');
+            notesArea.addEventListener('input', function() {
+                localStorage.setItem('notes', notesArea.value);
+            });
+        });
+    </script>
 </body>
 </html>
