@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>WhatsApp Links</title>
+<meta charset="UTF-8">
+<title>WhatsApp Web Links</title>
 </head>
 <body>
 
-<h3>Enter numbers (one per line)</h3>
-<textarea id="nums" rows="10" cols="30" placeholder="919876543210"></textarea>
+<textarea id="nums" rows="12" cols="35">
++91 70048 96285
++91 97426 74939
++91 99665 44040
++91 97907 83815
++91 99455 10524
++91 70013 74014
++91 72183 47022
++91 99007 98578
++91 87900 35220
++91 98446 34086
++91 77601 91093
+</textarea>
 <br><br>
 <button onclick="openAll()">Open All</button>
 
@@ -16,39 +27,41 @@
 
 <script>
 const key = "wa_numbers";
-const textarea = document.getElementById("nums");
-const container = document.getElementById("links");
+const t = document.getElementById("nums");
+const box = document.getElementById("links");
 
-function render(text) {
-  const lines = text.split("\n").map(n => n.trim()).filter(Boolean);
-  container.innerHTML = "";
+function clean(n){
+  return n.replace(/\D/g,""); // remove + spaces etc
+}
 
-  lines.forEach(n => {
-    const a = document.createElement("a");
-    a.href = "https://wa.me/" + n;
-    a.textContent = "Open " + n;
-    a.target = "_blank";
-    container.appendChild(a);
-    container.appendChild(document.createElement("br"));
+function render(text){
+  box.innerHTML="";
+  text.split("\n").map(x=>x.trim()).filter(Boolean).forEach(n=>{
+    const num = clean(n);
+    const a=document.createElement("a");
+    a.href="https://web.whatsapp.com/send?phone="+num;
+    a.target="_blank";
+    a.textContent="Open "+num;
+    box.appendChild(a);
+    box.appendChild(document.createElement("br"));
   });
 }
 
-function load() {
-  const saved = localStorage.getItem(key) || "";
-  textarea.value = saved;
+function load(){
+  const saved=localStorage.getItem(key)||t.value;
+  t.value=saved;
   render(saved);
 }
 
-textarea.addEventListener("input", () => {
-  const text = textarea.value;
-  localStorage.setItem(key, text);
-  render(text);
+t.addEventListener("input",()=>{
+  localStorage.setItem(key,t.value);
+  render(t.value);
 });
 
-function openAll() {
-  const lines = textarea.value.split("\n").map(n => n.trim()).filter(Boolean);
-  lines.forEach(n => {
-    window.open("https://wa.me/" + n, "_blank");
+function openAll(){
+  t.value.split("\n").map(x=>x.trim()).filter(Boolean).forEach(n=>{
+    const num=clean(n);
+    window.open("https://web.whatsapp.com/send?phone="+num,"_blank");
   });
 }
 
