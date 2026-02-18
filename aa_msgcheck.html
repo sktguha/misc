@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WhatsApp Links</title>
+</head>
+<body>
+
+<h3>Enter numbers (one per line)</h3>
+<textarea id="nums" rows="10" cols="30" placeholder="919876543210"></textarea>
+<br><br>
+<button onclick="openAll()">Open All</button>
+
+<h3>Links</h3>
+<div id="links"></div>
+
+<script>
+const key = "wa_numbers";
+const textarea = document.getElementById("nums");
+const container = document.getElementById("links");
+
+function render(text) {
+  const lines = text.split("\n").map(n => n.trim()).filter(Boolean);
+  container.innerHTML = "";
+
+  lines.forEach(n => {
+    const a = document.createElement("a");
+    a.href = "https://wa.me/" + n;
+    a.textContent = "Open " + n;
+    a.target = "_blank";
+    container.appendChild(a);
+    container.appendChild(document.createElement("br"));
+  });
+}
+
+function load() {
+  const saved = localStorage.getItem(key) || "";
+  textarea.value = saved;
+  render(saved);
+}
+
+textarea.addEventListener("input", () => {
+  const text = textarea.value;
+  localStorage.setItem(key, text);
+  render(text);
+});
+
+function openAll() {
+  const lines = textarea.value.split("\n").map(n => n.trim()).filter(Boolean);
+  lines.forEach(n => {
+    window.open("https://wa.me/" + n, "_blank");
+  });
+}
+
+load();
+</script>
+
+</body>
+</html>
