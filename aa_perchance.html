@@ -34,6 +34,19 @@
     border-radius: 4px;
   }
   textarea:focus { border-color: #555; }
+  input[type=text] {
+    width: 100%;
+    margin-top: 0.6rem;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #d4d4d4;
+    font-family: inherit;
+    font-size: 0.9rem;
+    padding: 0.6rem 0.8rem;
+    outline: none;
+    border-radius: 4px;
+  }
+  input[type=text]:focus { border-color: #555; }
   .btn-row { display: flex; gap: 0.6rem; margin-top: 0.8rem; }
   button {
     padding: 0.5rem 1.2rem;
@@ -79,6 +92,7 @@
 
 <h1>Perchance Linker</h1>
 <textarea id="input" placeholder="1. Some text&#10;2. One more text&#10;3. Another prompt&#10;..."></textarea>
+<input type="text" id="suffix" placeholder="Common suffix for all URLs (optional)">
 <div class="btn-row">
   <button onclick="generate()">Generate Links</button>
   <button id="btn-open-all" onclick="openAll()">Open All in New Tabs</button>
@@ -91,6 +105,7 @@ let generatedUrls = [];
 
 function generate() {
   const raw = document.getElementById('input').value;
+  const suffix = document.getElementById('suffix').value.trim();
   const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
 
   const out = document.getElementById('output');
@@ -106,7 +121,7 @@ function generate() {
   }
 
   for (const text of items) {
-    const url = BASE_URL + '?' + text;
+    const url = BASE_URL + '?' + text + (suffix ? suffix : '');
     generatedUrls.push(url);
     const div = document.createElement('div');
     div.className = 'link-item';
@@ -130,5 +145,4 @@ document.getElementById('input').value = `1. Some text
 generate();
 </script>
 </body>
-  </html>
-  
+</html>
