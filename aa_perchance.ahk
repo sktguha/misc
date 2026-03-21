@@ -43,14 +43,39 @@ Loop %count%
     Loop 7
     {
         Send {PgDn}
-        Sleep 200
+        Sleep 1000
     }
-
     Loop 7
     {
         Send {PgUp}
-        Sleep 200
+        Sleep 1000
     }
+    Send {Esc}
+    Sleep 1000
+    Send ^{Tab}
+    Sleep 1000
+}
+return
+
+; Ctrl+G
+^g::
+Loop %count%
+{
+    Send ^s
+    Sleep 1000
+
+    Random, rand, 1000, 9999
+    FormatTime, ts,, yyyyMMdd_HHmmss
+
+    text := "cafe_" . ts . "_" . rand
+    Send %text%
+    Sleep 1000
+
+    Send {Enter}
+    Sleep 1000
+
+    Send {Esc}
+    Sleep 1000
 
     Send ^{Tab}
     Sleep 1000
