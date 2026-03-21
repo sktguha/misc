@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perchance Linker</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Courier New', monospace;
+    background: #0e0e0e;
+    color: #d4d4d4;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+  h1 {
+    font-size: 1rem;
+    color: #888;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+  textarea {
+    width: 100%;
+    height: 180px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #d4d4d4;
+    font-family: inherit;
+    font-size: 0.9rem;
+    padding: 0.8rem;
+    resize: vertical;
+    outline: none;
+    border-radius: 4px;
+  }
+  textarea:focus { border-color: #555; }
+  .btn-row { display: flex; gap: 0.6rem; margin-top: 0.8rem; }
+  button {
+    padding: 0.5rem 1.2rem;
+    background: #222;
+    border: 1px solid #444;
+    color: #ccc;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  button:hover { background: #2a2a2a; border-color: #666; }
+  #btn-open-all {
+    background: #1e2e1e;
+    border-color: #3a5a3a;
+    color: #7ec87e;
+    display: none;
+  }
+  #btn-open-all:hover { background: #253525; }
+  #output {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .link-item {
+    background: #161616;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    padding: 0.5rem 0.8rem;
+  }
+  .link-item a {
+    color: #7ec8e3;
+    font-size: 0.82rem;
+    word-break: break-all;
+    text-decoration: none;
+  }
+  .link-item a:hover { text-decoration: underline; }
+  .error { color: #a55; font-size: .85rem; }
+</style>
+</head>
+<body>
+
+<h1>Perchance Linker</h1>
+<textarea id="input" placeholder="1. Some text&#10;2. One more text&#10;3. Another prompt&#10;..."></textarea>
+<div class="btn-row">
+  <button onclick="generate()">Generate Links</button>
+  <button id="btn-open-all" onclick="openAll()">Open All in New Tabs</button>
+</div>
+<div id="output"></div>
+
+<script>
+const BASE_URL = 'https://perchance.org/ai-text-to-image-generator';
+let generatedUrls = [];
+
+function generate() {
+  const raw = document.getElementById('input').value;
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+
+  const out = document.getElementById('output');
+  out.innerHTML = '';
+  generatedUrls = [];
+
+  const items = lines.map(line => line.replace(/^\d+\.\s*/, '')).filter(Boolean);
+
+  if (!items.length) {
+    out.innerHTML = '<div class="error">No items found.</div>';
+    document.getElementById('btn-open-all').style.display = 'none';
+    return;
+  }
+
+  for (const text of items) {
+    const url = BASE_URL + '?' + text;
+    generatedUrls.push(url);
+    const div = document.createElement('div');
+    div.className = 'link-item';
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.textContent = url;
+    div.appendChild(a);
+    out.appendChild(div);
+  }
+
+  document.getElementById('btn-open-all').style.display = 'inline-block';
+}
+
+function openAll() {
+  generatedUrls.forEach(url => window.open(url, '_blank'));
+}
+
+document.getElementById('input').value = `1. Some text
+2. One more text`;
+generate();
+</script>
+</body>
+  </html>
+  
